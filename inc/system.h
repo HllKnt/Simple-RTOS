@@ -1,0 +1,5 @@
+#include "./type.h"
+#include "./lock.h"
+#include "./malloc.h"
+#include "./sched.h"
+#include "./task.h"
