@@ -1,16 +1,20 @@
-#include "../inc/system.h"
+#include "system.h"
+#include "task.h"
 
-extern void task1();
-extern void task2();
-extern void task3();
+void task1() {
+}
 
-int main()
-{
-    init_heap_as_block();
-    init_task_list();
-    create_task(task1);
-    create_task(task2);
-    create_task(task3);
-    set_first_task(); 
+void task2() {
+    while (1);
+}
+
+void task3() {
+    while (1);
+}
+
+int main (int argc, char *argv[]) {
+    create_task(1, 0x100, 0, task1,  RUNNING, LOW);
+    create_task(2, 0x100, 0, task2,  RUNNING, LOW);
+    create_task(3, 0x100, 0, task3,  RUNNING, LOW);
     return 0;
 }
