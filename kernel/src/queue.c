@@ -38,8 +38,8 @@ void QueueInit(struct Queue *self, uint32_t size) {
     self->size = size;
     self->head = 0;
     self->tail = 0;
-    extern struct Heap *sys_heap;
-    self->data = my_malloc(sys_heap, sizeof(void *) * size);
+    extern struct Heap *kernel_heap;
+    self->data = my_malloc(kernel_heap, sizeof(void *) * size);
     self->is_empty = is_empty;
     self->is_full = is_full;
     self->front = front;

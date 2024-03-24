@@ -20,8 +20,8 @@ struct Task *create_task(uint8_t id,
         void(*entry)(),
         TaskStatus status,
         TaskPriority priority) {
-    extern struct Heap *sys_heap;
-    struct Task *task = my_malloc(sys_heap, sizeof(struct Task));
+    extern struct Heap *kernel_heap;
+    struct Task *task = my_malloc(kernel_heap, sizeof(struct Task));
     task->id = id;
     task->entry = entry;
     task->status = status;
@@ -29,7 +29,8 @@ struct Task *create_task(uint8_t id,
     task->stack_page = allocate_page(STACK_PAGE, stack_size);
     task->heap_page = allocate_page(HEAP_PAGE, heap_size);
     task->stack_ptr = (uint32_t *)(task->stack_page.start);
-    HeapInit(&task->heap, task->heap_page.start, task->heap_page.memory_size);
+    if (task->heap_page.memory_size > 0)
+        HeapInit(&task->heap, task->heap_page.start, task->heap_page.memory_size);
     ready_to_entry(task);
     task_list.insert(&task_list, task);
     return task;

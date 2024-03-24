@@ -1,7 +1,6 @@
     .thumb
     .syntax unified
 
-
     .section .text
 
     .type reset_handler, function
@@ -9,12 +8,10 @@
 reset_handler:
 # 屏蔽中断 nmi和hardfault除外
     cpsid i
-# 主要设置cpu频率
-    #bl SystemInit
 # 初始化内存sram中的数据区
     bl _memory_init
-# 初始化系统堆区 进程链表 定时器链表 开启守护进程维护系统堆区
-    bl start_daemon
+# 初始化内核堆栈 以及进程链表 定时器链表
+    bl kernel_init
 # 设置和初始化外设 创建进程
     bl main
 # 初始化 pendsv中断 进程上下文切换在此中断实现
@@ -32,7 +29,7 @@ reset_handler:
     b .
 
 # 一般是上访成硬件错误
-# 查看出错之前的栈 或许可以追踪出错代码的地址
+# 出错之前的部分寄存器信息自动保存在栈中
     .type hardfault_handler, function 
     .global hardfault_handler
 hardfault_handler:

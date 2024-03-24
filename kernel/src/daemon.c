@@ -6,9 +6,6 @@
 #include "malloc.h"
 #include "schedule.h"
 
-struct Heap *sys_heap;
-static struct Heap heap;
-
 static void clean_dead_task() {
     extern struct List task_list;
     for (struct Chain *iterator = task_list.head->forward;
@@ -17,14 +14,16 @@ static void clean_dead_task() {
         iterator = iterator->forward;
         struct Task *task = tmp->element;
         if (task->status == DEAD) {
-            task_list.delete(tmp);
             free_page(HEAP_PAGE, task->heap_page);
             free_page(STACK_PAGE, task->stack_page);
-            my_free(sys_heap, task);
+            task_list.delete(tmp);
+            extern struct List timer_list;
+            timer_list.delete(task->timer);
+            extern struct Heap *kernel_heap;
+            my_free(kernel_heap, task);
         }
     }
 }
-// 缺少回收定时器链表资源
 
 static struct Task *self;
 
@@ -36,15 +35,7 @@ static void daemon() {
     }
 }
 
-void start_daemon() {
-    struct Pages sys_heap_page = allocate_page(HEAP_PAGE, 0x400);
-    HeapInit(&heap, sys_heap_page.start, sys_heap_page.memory_size);
-    sys_heap = &heap;
-    allocate_page(STACK_PAGE, 0x300);
-    extern void task_list_init();
-    task_list_init();
-    extern void timer_list_init();
-    timer_list_init();
-    self = create_task(0, 0x100, 0, daemon, SLEEP, LOW);
+void create_daemon() {
+    self = create_task(0, 0x400, 0, daemon, SLEEP, LOW);
     apply_timer(self, 100);
 }

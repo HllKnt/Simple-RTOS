@@ -3,6 +3,7 @@
 #include "stdint.h"
 #include "page.h"
 #include "heap.h"
+#include "list.h"
 
 typedef enum {
     CREATED, RUNNING, SLEEP, DEAD
@@ -21,6 +22,7 @@ struct Task {
     uint32_t *stack_ptr; // sp
     struct Pages stack_page, heap_page;
     struct Heap heap;
+    struct Chain *timer;
 };
 
 struct Task *create_task(uint8_t id,

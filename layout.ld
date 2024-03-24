@@ -1,7 +1,7 @@
 MEMORY
 {
-    flash (rx) : ORIGIN = 0x08000000, LENGTH = 0x00800000 
-    sram (rwx) : ORIGIN = 0X20000000, LENGTH = 0x00002000
+    flash (rx) : ORIGIN = 0x08000000, LENGTH = 0x00080000 
+    sram (rwx) : ORIGIN = 0X20000000, LENGTH = 0x00010000
 }
 
 SECTIONS
@@ -28,10 +28,10 @@ SECTIONS
     data_load_address = LOADADDR(.data);
     data_start_address = ADDR(.data);
     data_end_address = data_start_address + SIZEOF(.data);
-    heap_size = 0x800;
-    stack_size = 0x800;
-    heap_page_size = 0x100;
-    stack_page_size = 0x100;
+    heap_size = 0x7800;
+    stack_size = 0x7800;
+    heap_page_size = 0x400;
+    stack_page_size = 0x400;
     heap_page_amount = heap_size / heap_page_size;
     stack_page_amount = stack_size / stack_page_size;
     .bss (NOLOAD):
