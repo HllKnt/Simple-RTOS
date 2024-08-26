@@ -1,0 +1,24 @@
+# display/z $r0
+# display/z $r1
+# display/z $r2
+# display/z $r3
+# display/z $r4
+# display/z $r5
+# display/z $r6
+# display/z $r7
+# display/z $r8
+# display/z $r9
+# display/z $r10
+# display/z $r11
+# display/z $r12
+# display/z $sp
+# display/z $lr
+# display/z $pc
+# display/z $xpsr
+
+set disassemble-next-line on
+b main
+# qemu gdb default port 1234
+# st-util gdb default port 4242
+target remote : 4242
+c
